@@ -1,45 +1,35 @@
-import { Component, computed, signal } from '@angular/core';
+import { Component, signal, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { ValidationService } from '../../services/validation/validation.service';
 import { VALIDATIONS } from '../../utils/validation';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   imports: [FormsModule],
+  providers: [ValidationService],
 })
 export class HomeComponent {
+  protected readonly validationService = inject(ValidationService);
   protected readonly inputValue = signal('');
-  protected readonly validations = [
+
+  private readonly validations = [
     VALIDATIONS.minLength({ parameters: { minLength: 9 } }),
     VALIDATIONS.maxLength({ parameters: { maxLength: 9 } }),
     VALIDATIONS.whitespaceEveryNthCharacter({ parameters: { nthCharacter: 3 } }),
     VALIDATIONS.numberOnly(),
     VALIDATIONS.isValidACNNumber(),
   ];
-  protected readonly inputValueValidation = computed(() => {
-    if (this.inputValue() === '')
-      return {
-        success: false,
-        message: '',
-      };
-    for (const validation of this.validations) {
-      if (!validation.validator(this.inputValue())) {
-        return {
-          success: false,
-          message: validation.message,
-        };
-      }
-    }
 
-    return {
-      success: true,
-      message: 'Valid ACN Number',
-    };
-  });
-  protected readonly inputValuValidationList = computed(() => {
-    return this.validations.map((validation) => ({
-      success: validation.validator(this.inputValue()),
-      message: validation.name,
-    }));
-  });
+  constructor() {
+    this.validationService.configure(this.inputValue, this.validations, 'Valid ACN Number');
+  }
+
+  protected get inputValueValidation() {
+    return this.validationService.inputValueValidation;
+  }
+
+  protected get inputValueValidationList() {
+    return this.validationService.inputValueValidationList;
+  }
 }

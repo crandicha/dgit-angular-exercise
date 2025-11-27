@@ -12,7 +12,7 @@
     <div class="mt-10">
       <h3>Validation List</h3>
       <ul class="border-2 border-gray-300 rounded p-2">
-        @for (validation of inputValuValidationList(); track validation.message) {
+        @for (validation of inputValueValidationList(); track validation.message) {
           <li>
             <span [class]="validation.success ? 'text-green-500' : 'text-red-500'">{{ validation.message }}</span>
           </li>

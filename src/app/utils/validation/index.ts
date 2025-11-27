@@ -1,14 +1,14 @@
-type TValidationReturn = {
+export type TValidationReturn = {
   validator: (value: string) => boolean;
   message: string;
   name?: string;
 };
 
-type TValidationProps<T = void> = T extends void
+export type TValidationProps<T = void> = T extends void
   ? { customMessage?: string }
   : { customMessage?: string; parameters?: T };
 
-type TValidationFunction<T = void> = (props?: TValidationProps<T>) => TValidationReturn;
+export type TValidationFunction<T = void> = (props?: TValidationProps<T>) => TValidationReturn;
 
 export const VALIDATIONS = {
   minLength: ({ parameters, customMessage }: TValidationProps<{ minLength?: number }> = {}) => {
