@@ -88,7 +88,10 @@ describe('VALIDATIONS', () => {
     it('should validate whitespace pattern with default parameter (3)', () => {
       const validation = VALIDATIONS.whitespaceEveryNthCharacter();
 
-      expect(validation.validator('abc def ghi')).toBe(true);
+      expect(validation.validator('abc')).toBe(true); // 1 group
+      expect(validation.validator('abc def')).toBe(true); // 2 groups
+      expect(validation.validator('abc def ghi')).toBe(true); // 3 groups
+      expect(validation.validator('abc def ghi jkl')).toBe(true); // 4 groups
       expect(validation.validator('abcdefghi')).toBe(true); // no spaces is valid
       expect(validation.validator('ab cd ef')).toBe(false);
       expect(validation.validator('abcd efg hij')).toBe(false);
@@ -99,9 +102,12 @@ describe('VALIDATIONS', () => {
         parameters: { nthCharacter: 2 },
       });
 
-      expect(validation.validator('ab cd ef')).toBe(true);
-      expect(validation.validator('abcdef')).toBe(true);
+      expect(validation.validator('ab')).toBe(true); // 1 group
+      expect(validation.validator('ab cd')).toBe(true); // 2 groups
+      expect(validation.validator('ab cd ef')).toBe(true); // 3 groups
+      expect(validation.validator('abcdef')).toBe(true); // no spaces
       expect(validation.validator('abc def')).toBe(false);
+      expect(validation.validator('a bc')).toBe(false);
     });
 
     it('should return true when value has no spaces', () => {

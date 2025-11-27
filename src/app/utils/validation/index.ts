@@ -1,6 +1,7 @@
 type TValidationReturn = {
   validator: (value: string) => boolean;
   message: string;
+  name?: string;
 };
 
 type TValidationProps<T = void> = T extends void
@@ -15,6 +16,7 @@ export const VALIDATIONS = {
     return {
       validator: (value: string) => value.replaceAll(' ', '').length >= minLength,
       message: customMessage || `Value must be at least ${minLength} characters long`,
+      name: 'minLength: ' + minLength,
     };
   },
   maxLength: ({ parameters, customMessage }: TValidationProps<{ maxLength?: number }> = {}) => {
@@ -22,6 +24,7 @@ export const VALIDATIONS = {
     return {
       validator: (value: string) => value.replaceAll(' ', '').length <= maxLength,
       message: customMessage || `Value must be at most ${maxLength} characters long`,
+      name: 'maxLength: ' + maxLength,
     };
   },
   whitespaceEveryNthCharacter: ({
@@ -32,16 +35,17 @@ export const VALIDATIONS = {
     return {
       validator: (value: string) => {
         if (!value.includes(' ')) return true;
-        return !!value.match(
-          new RegExp(`^\\w{${nthCharacter}} \\w{${nthCharacter}} \\w{${nthCharacter}}$`)
-        );
+
+        return !!value.match(new RegExp(`^\\w{${nthCharacter}}( \\w{${nthCharacter}})*$`));
       },
       message: customMessage || `Value must contain whitespace every ${nthCharacter} character`,
+      name: 'whitespaceEveryNthCharacter: ' + nthCharacter,
     };
   },
   numberOnly: ({ customMessage }: TValidationProps<void> = {}) => ({
     validator: (value: string) => !isNaN(Number(value.replaceAll(' ', ''))),
     message: customMessage || 'Value must be a number',
+    name: 'numberOnly',
   }),
   isValidACNNumber: ({ customMessage }: TValidationProps<void> = {}) => ({
     validator: (value: string) => {
@@ -61,5 +65,6 @@ export const VALIDATIONS = {
       return calculatedNumber === lastNumber;
     },
     message: customMessage || 'Value is not a valid ACN number',
+    name: 'isValidACNNumber',
   }),
 } satisfies Record<string, TValidationFunction<any>>;

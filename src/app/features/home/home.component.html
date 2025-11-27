@@ -1,5 +1,5 @@
 <div class="flex flex-col justify-center items-center h-screen gap-4">
-  <div class="flex flex-col gap-2">
+  <div class="flex flex-col gap-2 w-[300px] max-w-[300px]">
     <input
       id="valueInput"
       type="text"
@@ -8,6 +8,17 @@
       placeholder="Input value"
     />
     <p [class]="inputValueValidation().success ? 'text-green-500' : 'text-red-500'">{{ inputValueValidation().message }}</p>
+
+    <div class="mt-10">
+      <h3>Validation List</h3>
+      <ul class="border-2 border-gray-300 rounded p-2">
+        @for (validation of inputValuValidationList(); track validation.message) {
+          <li>
+            <span [class]="validation.success ? 'text-green-500' : 'text-red-500'">{{ validation.message }}</span>
+          </li>
+        }
+      </ul>
+    </div>
   </div>
 </div>
 
