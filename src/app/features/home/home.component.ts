@@ -22,7 +22,11 @@ export class HomeComponent {
   ];
 
   constructor() {
-    this.validationService.configure(this.inputValue, this.validations, 'Valid ACN Number');
+    this.validationService.configure({
+      validations: this.validations,
+      value: this.inputValue,
+      successMessage: 'Valid ACN Number',
+    });
   }
 
   protected get inputValueValidation() {

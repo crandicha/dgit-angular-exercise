@@ -6,20 +6,22 @@ export type TValidationResult = {
   message: string;
 };
 
+export type TValidationConfig = {
+  value: Signal<string>;
+  validations: TValidationReturn[];
+  successMessage?: string;
+};
+
 @Injectable()
 export class ValidationService {
   private validations: TValidationReturn[] = [];
   private successMessage = 'Valid';
   private inputValueSignal!: Signal<string>;
 
-  configure(
-    inputValue: Signal<string>,
-    validations: TValidationReturn[],
-    successMessage?: string
-  ): void {
-    this.inputValueSignal = inputValue;
+  configure({ value, validations, successMessage }: TValidationConfig): void {
+    this.inputValueSignal = value;
     this.validations = validations;
-    this.successMessage = successMessage ?? 'Valid';
+    this.successMessage = successMessage ?? this.successMessage;
   }
 
   readonly inputValueValidation = computed<TValidationResult>(() => {
